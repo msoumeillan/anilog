@@ -1,0 +1,82 @@
+.cropper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* Le cadre EST la zone gardee : ce qui deborde est ce qui sera coupe, et on le
+   montre en sombre plutot que de le cacher — sans lui on cadre a l'aveugle. */
+.cadre {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  overflow: hidden;
+  border-radius: var(--radius);
+  /* Le fond de la PAGE, pas une surface : en reculant au-dela de la
+     couverture, le vide reste transparent dans l'image produite et laissera
+     voir ce fond-la. L'apercu doit donc montrer la meme chose. */
+  background: var(--bg);
+  cursor: grab;
+  /* Sinon le doigt fait defiler la page au lieu de deplacer l'image. */
+  touch-action: none;
+  user-select: none;
+}
+
+.cadre:active {
+  cursor: grabbing;
+}
+
+.cadre:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.image {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  /* `max-width: 100%` de la feuille de base ecraserait la largeur calculee :
+     c'est elle qui porte le zoom, elle ne doit pas etre bornee. */
+  max-inline-size: none;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+/* Le disque de la photo de profil, en surimpression. Le carre autour sera
+   coupe a l'affichage : le montrer evite de cadrer sur des coins perdus.
+
+   `closest-side` n'est PAS optionnel. Sans mot-cle de taille, un
+   `radial-gradient(circle …)` prend `farthest-corner` : son rayon va jusqu'au
+   COIN, soit la demi-diagonale. Le trou ne faisait donc que 70 % du disque
+   reellement affiche par le `border-radius: 50%` de l'avatar — on cadrait dans
+   un cercle trop petit, et la photo finale montrait plus large que promis.
+   `closest-side` ramene le rayon au demi-cote : le cercle inscrit, exactement
+   ce que l'affichage garde. */
+.rond {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.45);
+  /* Un trou rond au milieu : le masque garde le pourtour, pas le disque. */
+  -webkit-mask-image: radial-gradient(circle closest-side at center, transparent 0 99%, #000 100%);
+  mask-image: radial-gradient(circle closest-side at center, transparent 0 99%, #000 100%);
+}
+
+.zoom {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.zoom input {
+  flex: 1;
+  min-inline-size: 0;
+  accent-color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+}

@@ -1,0 +1,82 @@
+.wrap {
+  position: relative;
+}
+
+.track {
+  display: flex;
+  gap: var(--sp-3);
+  overflow-x: auto;
+  /* Le débord vertical vient de l'ombre des affiches et de la bulle de
+     survol : `visible` les couperait, `auto` ajouterait une seconde barre. */
+  overflow-y: hidden;
+  padding-block-end: var(--sp-2);
+
+  /* La barre native disparaît, le défilement reste — molette, doigt, flèches.
+     Posée sous une rangée d'affiches elle coupe la page en deux ; c'est ce
+     qui l'avait fait retirer des personnages. */
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Une affiche coupée au bord de l'écran donne l'impression d'un défilement
+   raté : on s'arrête sur une carte entière. */
+.track > * {
+  flex: 0 0 auto;
+  inline-size: 150px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 599px) {
+  .track > * {
+    inline-size: 128px;
+  }
+}
+
+/* ── Flèches ──────────────────────────────────────────────── */
+
+.arrow {
+  position: absolute;
+  inset-block-start: 0;
+  /* Sur la hauteur de l'affiche seule : l'affiche fait 3/2, plus rien pour
+     le titre et la ligne de méta qui la suivent. */
+  block-size: calc(150px * 3 / 2);
+  inline-size: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  background: linear-gradient(to right, transparent, rgb(11 11 12 / 0.82));
+  color: var(--text);
+  cursor: pointer;
+
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.left {
+  inset-inline-start: 0;
+  background: linear-gradient(to left, transparent, rgb(11 11 12 / 0.82));
+}
+
+.right {
+  inset-inline-end: 0;
+}
+
+.wrap:hover .arrow,
+.arrow:focus-visible {
+  opacity: 1;
+}
+
+/* Au doigt on pousse la rangée : deux boutons posés sur les affiches ne
+   feraient que masquer ce qu'on est venu voir. */
+@media (hover: none) {
+  .arrow {
+    display: none;
+  }
+}

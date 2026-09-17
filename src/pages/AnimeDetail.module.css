@@ -1,0 +1,383 @@
+.state {
+  padding-block: var(--sp-9);
+}
+
+/* ── Bandeau ──────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  block-size: clamp(240px, 32vw, 420px);
+  overflow: hidden;
+}
+
+.heroImg {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* Deux dégradés : un vertical pour poser le texte, un latéral pour que
+   le titre reste lisible même sur une image claire à gauche. */
+.heroVeil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(11 11 12 / 15%) 0%, rgb(11 11 12 / 78%) 58%, var(--bg) 100%),
+    linear-gradient(90deg, var(--bg) 0%, rgb(11 11 12 / 55%) 40%, transparent 72%);
+}
+
+.heroTop {
+  position: absolute;
+  inset-block-start: var(--sp-4);
+  inset-inline: 0;
+}
+
+.back {
+  padding-inline: var(--sp-3);
+  min-block-size: 36px;
+  background: rgb(11 11 12 / 70%);
+}
+
+.heroText {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.heroText p,
+.heroText h1 {
+  margin: 0;
+}
+
+/* ── Corps ────────────────────────────────────────────────── */
+
+/*
+ * L'affiche commence SOUS le bandeau, pas dessus.
+ *
+ * Elle remontait de 110 px sur le bandeau — 32 sur mobile —, pour la
+ * profondeur de la direction « salle obscure ». Mais le bandeau est
+ * positionné, donc peint AU-DESSUS du corps de la page : ces pixels passaient
+ * derrière son voile, son titre et son sous-titre, et l'affiche paraissait
+ * coupée en haut, sur les trois fiches, depuis leur création. La faire passer
+ * devant ne valait pas mieux : elle couvrait le début du titre, et décaler le
+ * titre à droite le tassait sur quatre lignes à 1 100 px de large.
+ */
+.body {
+  display: grid;
+  gap: var(--sp-6);
+  padding-block: var(--sp-5) var(--sp-9);
+}
+
+@media (min-width: 900px) {
+  .body {
+    grid-template-columns: 268px minmax(0, 1fr);
+    gap: var(--sp-7);
+  }
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.cover {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  box-shadow: var(--shadow-poster);
+}
+
+@media (max-width: 899px) {
+  /* Sur mobile l'affiche ne prend pas toute la largeur : elle partage
+     la ligne avec rien, mais reste petite pour que le bloc de suivi
+     arrive au-dessus de la ligne de flottaison. */
+  .rail > :global(.poster) {
+    inline-size: 132px;
+  }
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.links > p {
+  margin: 0;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 36px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+.link:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+.linkOut {
+  margin-inline-start: auto;
+  color: var(--text-3);
+}
+
+/* ── Colonne principale ───────────────────────────────────── */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  min-inline-size: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.section > h2,
+.section > p {
+  margin: 0;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+.sectionHead > * {
+  margin: 0;
+}
+
+.scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5) var(--sp-6);
+  align-items: flex-end;
+}
+.scores p {
+  margin: 0 0 var(--sp-1);
+}
+
+.big {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.chip {
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+/* Les genres mènent à leur collection : le survol le dit. */
+a.chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* ── Rangées horizontales ─────────────────────────────────── */
+
+/* Rangée qui passe à la ligne — jamais de défilement horizontal : dans une
+   page qui défile déjà verticalement, une barre de scroll cache autant
+   qu'elle montre, et un pavé tactile ne lui donne aucune affordance. */
+/* ── Informations ─────────────────────────────────────────── */
+
+.infos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--sp-4);
+  margin: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.info dt {
+  margin: 0;
+}
+
+.infoValue {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-2);
+}
+
+/* Titre de section cliquable — la porte vers la liste complète. */
+.sectionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  align-self: flex-start;
+  color: var(--text-2);
+}
+.sectionLink:hover {
+  color: var(--accent-hi);
+}
+.sectionLink h2 {
+  margin: 0;
+  color: inherit;
+}
+
+/* Renvoi vers la page épisodes : la liste complète n'a plus sa place ici. */
+.epsLink {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--text-2);
+}
+.epsLink:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.epsText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.epsNext {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Liens discrets à l'intérieur d'un bloc d'information. */
+.inlineLink {
+  color: var(--text-2);
+  border-block-end: 1px solid var(--line-strong);
+}
+.inlineLink:hover {
+  color: var(--accent-hi);
+  border-block-end-color: var(--accent);
+}
+
+.studioList {
+  display: inline;
+}
+
+/* Lien secondaire sous une section — plus discret que le titre cliquable. */
+.subLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  font-size: var(--text-sm);
+  color: var(--text-3);
+}
+.subLink:hover {
+  color: var(--accent-hi);
+}
+
+/* L'affiche est cliquable pour se voir en grand. Un bouton et pas un `onClick`
+   sur l'image : il faut le clavier, le focus et l'annonce qui vont avec. */
+.coverBtn {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+/* ── Squelette d'attente ──────────────────────────────────── */
+
+/* Faute de bandeau, l'affiche fait l'arriere-plan : floutee et assombrie, elle
+   donne la bonne couleur a la page en attendant la vraie image. */
+.heroBlur {
+  filter: blur(28px) brightness(0.55);
+  transform: scale(1.15);
+}
+
+/* Un titre inconnu : un pave a la hauteur de celui qui va le remplacer, pour
+   que rien ne saute quand la reponse arrive. */
+.skelTitle {
+  display: block;
+  inline-size: min(420px, 70%);
+  block-size: clamp(2rem, 5vw, 3.4rem);
+  border-radius: var(--radius);
+}
+
+/* ── Notes des autres bases (manga) ───────────────────────── */
+
+/* Sept notes ramenees sur 100. Discretes a dessein : elles situent l'oeuvre,
+   elles ne concurrencent pas celle qu'on va lui donner soi-meme. */
+.otherScores {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex: 1 1 100%;
+}
+
+.scoreRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+}
+
+.otherScore {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+/* Le logo d'une base de notes. Hauteur fixe : les sept fichiers n'ont ni les
+   memes proportions ni le meme cadrage, et sans elle la ligne ondulerait. */
+.mark {
+  block-size: 18px;
+  inline-size: auto;
+  max-inline-size: 42px;
+  object-fit: contain;
+  border-radius: 3px;
+}
+
+/* Le repli quand un logo manque : deux ou trois lettres sur la couleur de la
+   marque. Le blanc est impose — ces couleurs sont sombres, et le theme clair
+   les eclaircirait. */
+.markText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 2.4em;
+  padding-inline: var(--sp-1);
+  border-radius: 4px;
+  color: #fff;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: 1.6;
+}

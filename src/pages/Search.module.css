@@ -1,0 +1,106 @@
+/* La page de tous les résultats — voir Search.tsx. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding-block: var(--sp-6) var(--sp-9);
+}
+
+.page h1,
+.page p {
+  margin: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.tete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.tete h2 {
+  margin: 0;
+}
+
+/* La même allure que « See all » sur l'accueil : discret jusqu'au survol. */
+.lien {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.lien:hover {
+  color: var(--accent-hi);
+}
+
+/* ── Studios ──────────────────────────────────────────────── */
+
+/* Pas de grille d'affiches : AniList n'a pas d'image de studio. Des lignes,
+   en colonnes qui remplissent la largeur. */
+.studios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.studio,
+.studio:hover {
+  color: var(--text);
+}
+
+.studio {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-block-size: var(--tap);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color var(--dur-1) var(--ease);
+}
+
+.studio:hover {
+  border-color: var(--line-strong);
+}
+
+.pictogramme {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text-3);
+}
+
+.texte {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+
+.nom {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+}

@@ -1,0 +1,332 @@
+/* Les lignes de l'onglet Musiques — voir MusicRow.tsx. */
+
+/* La ligne est le CONTENANT : son rang se lit toujours, et un anime déplié
+   pose sa table dessous, dans le même bloc. */
+.ligne {
+  border-block-end: 1px solid var(--line);
+}
+
+.rang {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2);
+}
+
+.ligne:hover {
+  background: var(--surface-1);
+}
+
+/* Ce qui joue reste repérable même après avoir fait défiler la liste. */
+.ligne[aria-current='true'] {
+  background: var(--surface-1);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+/* La ligne qu'on déplace passe AU-DESSUS des autres, qui s'écartent pour elle :
+   sans l'ombre et le fond, elle glisserait sous ses voisines. Écrite APRÈS la
+   ligne en cours de lecture, pour gagner quand on déplace celle qui joue. */
+.ligne[data-dragging='true'] {
+  position: relative;
+  z-index: 2;
+  background: var(--surface-2);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 45%);
+}
+
+/* ── La vignette, qui agit ────────────────────────────────── */
+
+.action {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cadre {
+  display: block;
+  inline-size: 42px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.cadre[data-shape='poster'] {
+  aspect-ratio: 2 / 3;
+}
+
+.cadre[data-shape='square'] {
+  aspect-ratio: 1 / 1;
+}
+
+.image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.initiale {
+  display: grid;
+  place-items: center;
+  block-size: 100%;
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+/*
+ * Le repère d'action, posé SUR la vignette.
+ *
+ * Invisible au repos : quarante lignes portant chacune un triangle blanc
+ * feraient une grille de triangles, et on ne verrait plus les affiches. Il
+ * apparaît là où le regard est déjà — sous le curseur, ou sur le bouton qui a
+ * le focus.
+ */
+.glyphe {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 55%);
+  color: var(--text);
+  opacity: 0;
+  transition: opacity var(--dur-1) var(--ease);
+}
+
+.ligne:hover .glyphe,
+.action:focus-visible .glyphe {
+  opacity: 1;
+}
+
+/* ── Le texte ─────────────────────────────────────────────── */
+
+.texte {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.titre {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.nom {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: 700;
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nom:hover,
+.nom:focus-visible {
+  color: var(--accent-hi);
+}
+
+.badge {
+  flex: none;
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  color: var(--accent-hi);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+/* Un ending et un insert ne sont pas ce qu'on cherche en premier : ils gardent
+   le repère, pas l'accent, qui est réservé à ce qui nous appartient. */
+.badge[data-kind='ED'],
+.badge[data-kind='IN'] {
+  border-color: var(--line-strong);
+  color: var(--text-3);
+}
+
+/* La ligne de contexte : artiste, anime, année — séparés par des points qui
+   n'existent qu'ENTRE deux éléments présents. */
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  margin: 0;
+  min-inline-size: 0;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.meta > * {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* L'année ne se coupe jamais : elle tient en quatre caractères, et un « 20… »
+   n'informe de rien. C'est l'artiste, le plus long, qui cède. */
+.annee {
+  flex: none;
+}
+
+.meta > * + *::before {
+  content: '·';
+  margin-inline-end: var(--sp-2);
+}
+
+.lien {
+  color: var(--text-2);
+}
+
+.lien:hover {
+  color: var(--accent-hi);
+}
+
+/* ── Les commandes ────────────────────────────────────────── */
+
+.commandes {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.note {
+  min-inline-size: 1.5rem;
+  text-align: end;
+  color: var(--accent-hi);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.etoile {
+  display: grid;
+  place-items: center;
+  inline-size: 30px;
+  block-size: 30px;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.etoile:hover {
+  color: var(--accent-hi);
+}
+
+.etoile[aria-pressed='true'] {
+  color: var(--accent-hi);
+}
+
+/* ── Les génériques d'un anime, dépliés sous sa ligne ─────── */
+
+/*
+ * Une vraie table, parce que c'en est une : quatre colonnes qu'on lit en
+ * descendant — le type, le titre, la plage d'épisodes, ce qu'on téléchargera.
+ * Elle est DÉCALÉE sous la vignette pour qu'on voie tout de suite à quelle
+ * affiche elle appartient.
+ */
+.table {
+  inline-size: 100%;
+  margin: 0 0 var(--sp-2) calc(42px + var(--sp-3) + var(--sp-2));
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.table th {
+  padding: var(--sp-1) var(--sp-3) var(--sp-1) 0;
+  border-block-end: 1px solid var(--line);
+  color: var(--text-3);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  font-weight: var(--label-weight);
+  text-align: start;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--sp-2) var(--sp-3) var(--sp-2) 0;
+  border-block-end: 1px solid var(--line);
+  color: var(--text-2);
+  vertical-align: baseline;
+}
+
+.table tr:last-child td {
+  border-block-end: none;
+}
+
+.table tr:hover td {
+  color: var(--text);
+}
+
+/* Ce qui joue se repère dans la table comme dans la liste. */
+.table tr[aria-current='true'] td:first-child {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.interpretes {
+  display: block;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+
+.episodes {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.notes {
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+/* Ranger et étoiler, côte à côte : deux gestes sur la même chanson. */
+.gestes {
+  white-space: nowrap;
+}
+
+.gestes > * {
+  display: inline-grid;
+  vertical-align: middle;
+}
+
+.vide {
+  margin: 0 0 var(--sp-3) calc(42px + var(--sp-3) + var(--sp-2));
+}
+
+@media (max-width: 640px) {
+  /* L'année et la note passent à la trappe avant le titre : l'une se devine,
+     l'autre se lit dans le lecteur. */
+  .annee,
+  .note {
+    display: none;
+  }
+
+  /* La table revient à gauche et perd ses notes : quatre colonnes ne tiennent
+     pas, et le poids d'un fichier n'est pas ce qu'on cherche sur un téléphone. */
+  .table,
+  .vide {
+    margin-inline-start: 0;
+  }
+
+  .notes,
+  .table th:nth-child(4) {
+    display: none;
+  }
+}

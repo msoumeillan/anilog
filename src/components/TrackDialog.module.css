@@ -1,0 +1,280 @@
+/* Le contenu de la fenêtre de suivi. L'encadré qui portait tout ça sur la
+   fiche a disparu : la fenêtre EST le cadre. */
+
+/* ── Statut ───────────────────────────────────────────────── */
+
+.statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.status {
+  min-block-size: 34px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease);
+}
+
+.status:hover {
+  border-color: var(--text-3);
+  color: var(--text);
+}
+
+.status[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 700;
+}
+
+/* ── Champs ───────────────────────────────────────────────── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.fieldHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.count {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Progression ──────────────────────────────────────────── */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.step {
+  inline-size: var(--tap);
+  block-size: var(--tap);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.step:hover:not(:disabled) {
+  border-color: var(--text-3);
+}
+
+.step:disabled {
+  color: var(--text-3);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.bar {
+  flex: 1 1 auto;
+  block-size: 2px;
+  background: var(--surface-3);
+}
+
+.barFill {
+  block-size: 100%;
+  background: var(--accent);
+  transition: inline-size var(--dur-2) var(--ease);
+}
+
+/* ── Note ─────────────────────────────────────────────────── */
+
+.scores {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.scoreBtn {
+  min-block-size: 34px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.scoreBtn:hover {
+  border-color: var(--text-3);
+  color: var(--text);
+}
+
+/* Remplissage jusqu'à la note choisie : on lit la valeur d'un coup d'œil,
+   comme des étoiles, mais sur dix crans et avec le chiffre visible. */
+.scoreBtn[aria-pressed='true'] {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent-hi);
+  font-weight: 700;
+}
+
+/* ── Critique ─────────────────────────────────────────────── */
+
+.review {
+  padding: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  line-height: var(--lh-body);
+  resize: vertical;
+}
+
+.review::placeholder {
+  color: var(--text-3);
+}
+
+.review:focus {
+  border-color: var(--text-3);
+  outline: none;
+}
+
+/* Le bouton reste a la taille de son texte : une barre pleine largeur se lit
+   comme la validation de TOUTE la fenetre, alors qu'il ne valide que la
+   critique. */
+.saveReview {
+  align-self: flex-start;
+  min-block-size: 34px;
+  font-size: var(--text-xs);
+}
+
+.saveReview:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.unsaved {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--accent-hi);
+}
+
+.remove {
+  align-self: flex-start;
+  min-block-size: 34px;
+  font-size: var(--text-xs);
+  color: var(--text-3);
+}
+
+.remove:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* ── Étiquettes personnelles ──────────────────────────────── */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: 3px var(--sp-1) 3px var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+.tagRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.tagRemove:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.input {
+  min-block-size: 38px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.input:focus-visible {
+  border-color: var(--line-strong);
+}
+
+/* L'étiquette mène à la bibliothèque filtrée sur elle. */
+.tagLink {
+  color: inherit;
+}
+
+.tagLink:hover {
+  color: var(--accent-hi);
+}
+
+/* Le compteur est saisissable : mille épisodes ne se comptent pas au clic.
+   Il reste une valeur affichée tant qu'on n'y touche pas — pas de cadre de
+   champ qui alourdirait la ligne. */
+.countInput {
+  inline-size: 4ch;
+  padding: 0;
+  border: 0;
+  border-block-end: 1px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: end;
+  /* Les flèches natives sont minuscules et redondantes avec +/−. */
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.countInput::-webkit-outer-spin-button,
+.countInput::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.countInput:hover {
+  border-block-end-color: var(--line-strong);
+}
+
+.countInput:focus {
+  outline: none;
+  border-block-end-color: var(--accent);
+}

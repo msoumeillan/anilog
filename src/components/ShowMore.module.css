@@ -1,0 +1,27 @@
+.more {
+  align-self: flex-start;
+  min-block-size: 34px;
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  font-size: var(--text-xs);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  font-weight: var(--label-weight);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease);
+}
+
+.more:hover:not(:disabled) {
+  border-color: var(--text-3);
+  color: var(--text);
+}
+
+.more:disabled {
+  cursor: progress;
+  color: var(--text-3);
+}

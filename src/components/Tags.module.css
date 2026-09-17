@@ -1,0 +1,56 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+/* Volontairement discret : un tag est une piste, pas une donnée de la fiche.
+   C'est le survol qui révèle qu'on peut cliquer. */
+.chip {
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+
+.chip:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+/* Un tag spoiler reste signalé une fois révélé : on a choisi de le voir, on
+   ne doit pas le confondre avec les autres en revenant sur la page. */
+.spoiler {
+  border-style: dashed;
+  border-color: var(--line-strong);
+}
+
+.toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}
+
+.toggle {
+  min-block-size: 30px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: var(--text-xs);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  font-weight: var(--label-weight);
+  cursor: pointer;
+}
+
+.toggle:hover {
+  color: var(--accent-hi);
+}

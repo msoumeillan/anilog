@@ -1,0 +1,6 @@
+/* L'etoile pleine se voit de loin ; la couleur d'accent dit « c'est a moi »
+   comme sur les autres boutons actifs de l'app. */
+.on {
+  border-color: var(--accent);
+  color: var(--accent-hi);
+}

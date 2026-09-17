@@ -1,0 +1,154 @@
+.header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-block-end: 1px solid var(--line);
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-block-size: 60px;
+  flex-wrap: wrap;
+  padding-block: var(--sp-2);
+}
+
+/* Un lien vers l'accueil, qui garde l'allure du logo : la couleur du texte
+   plutôt que celle des liens, survol compris. */
+.logo,
+.logo:hover {
+  color: var(--text);
+}
+
+.logo {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* ── Sélecteur de média ───────────────────────────────────── */
+
+.mediaSwitch {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.mode {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  block-size: 32px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.mode:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+  border-inline-end: 0;
+}
+.mode:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.mode:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.modeOn {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+/* ── Navigation ───────────────────────────────────────────── */
+
+.nav {
+  display: flex;
+  gap: var(--sp-5);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.navLink {
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  padding-block: var(--sp-1);
+  border-block-end: 2px solid transparent;
+  transition: color var(--dur-1) var(--ease);
+}
+
+.navLink:hover {
+  color: var(--text-2);
+}
+
+.navOn {
+  color: var(--text);
+  font-weight: 600;
+  border-block-end-color: var(--accent);
+}
+
+/* ── Recherche ────────────────────────────────────────────── */
+
+/* Poussée à droite de la barre. Elle rétrécit jusqu'à 220 px avant de passer
+   à la ligne. */
+.recherche {
+  flex: 1 1 220px;
+  max-inline-size: 320px;
+  margin-inline-start: auto;
+}
+
+/* Sous 960 px, un champ entier ne tient plus à côté de la navigation : il
+   aurait ajouté une rangée à un en-tête qui colle en haut de l'écran. La
+   recherche s'y replie en loupe au bout de la barre ; touchée, elle couvre la
+   première rangée le temps de la saisie. */
+@media (max-width: 960px) {
+  .recherche {
+    flex: none;
+    max-inline-size: none;
+  }
+
+  .recherche:focus-within {
+    position: absolute;
+    inset-block-start: var(--sp-2);
+    inset-inline: var(--gutter);
+  }
+
+  /* La rangée garde sa hauteur quand la loupe en sort pour s'ouvrir : sans
+     ça, la navigation remontait de douze pixels au toucher. */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--tap);
+  }
+}
+
+/* Sur un téléphone, la navigation passe à la ligne : la loupe reste au bout
+   de la première rangée plutôt que de la suivre. */
+@media (max-width: 720px) {
+  .nav {
+    order: 1;
+  }
+}
+
+.introuvable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-block: var(--sp-8) var(--sp-9);
+}
+
+.introuvable h1 {
+  margin: 0;
+}
+.introuvable p {
+  margin: 0;
+}

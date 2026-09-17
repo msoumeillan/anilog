@@ -1,0 +1,267 @@
+.state {
+  padding-block: var(--sp-9);
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-block: var(--sp-5) var(--sp-9);
+}
+
+/* ── En-tête ──────────────────────────────────────────────── */
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-block-end: var(--sp-3);
+  border-block-end: 1px solid var(--line);
+}
+
+.back {
+  align-self: flex-start;
+  min-block-size: 34px;
+  padding-inline: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--text-3);
+  border-color: transparent;
+}
+.back:hover {
+  color: var(--text);
+}
+
+.headMain {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+.headMain > * {
+  margin: 0;
+}
+
+.tools {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: 34px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.toggle:hover {
+  border-color: var(--text-3);
+  color: var(--text);
+}
+.toggle[aria-pressed='true'] {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent-hi);
+}
+
+.notice {
+  margin: 0;
+  padding: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  color: var(--text-2);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: var(--text-sm);
+  line-height: var(--lh-body);
+}
+
+/* ── Liste ────────────────────────────────────────────────── */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  border-block-end: 1px solid var(--line);
+}
+
+/* Un épisode vu s'efface : ce qui reste à voir doit ressortir. */
+.rowSeen .title,
+.rowSeen .num {
+  color: var(--text-3);
+}
+
+.check {
+  inline-size: 22px;
+  block-size: 22px;
+  flex: 0 0 auto;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background var(--dur-1) var(--ease),
+    border-color var(--dur-1) var(--ease);
+}
+.check:hover:not(:disabled) {
+  border-color: var(--text-3);
+}
+.check:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.check[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.num {
+  inline-size: 30px;
+  flex: 0 0 auto;
+  text-align: end;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+.thumb {
+  inline-size: 84px;
+  aspect-ratio: 16 / 9;
+  flex: 0 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.thumb img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.thumbMasked {
+  background: var(--surface-1);
+}
+
+.body {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.title {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Le titre masqué n'est pas un texte flouté mais une barre : rien à déchiffrer. */
+.masked {
+  display: block;
+  block-size: 11px;
+  inline-size: min(62%, 260px);
+  border-radius: var(--radius);
+  background: var(--surface-3);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.badge {
+  padding: 1px var(--sp-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.rewatch {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.score {
+  inline-size: 40px;
+  flex: 0 0 auto;
+  text-align: end;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-3);
+}
+
+@media (max-width: 560px) {
+  .thumb {
+    display: none;
+  }
+  .score {
+    display: none;
+  }
+}
+
+/* Les notes d'épisode de MAL sont sur 5 : sans le repère, on les confond
+   avec la note personnelle sur 10 affichée ailleurs. */
+.scoreScale {
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+
+/* La ligne entière ouvre la fenêtre de l'épisode : elle reprend la mise en
+   page qu'avait le <li>, puisqu'elle en porte désormais tout le contenu. */
+.open {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.open:disabled {
+  cursor: default;
+}
+
+.open:hover:not(:disabled) .title {
+  color: var(--accent-hi);
+}
+
+/* Annoncé mais pas diffusé : présent pour se repérer, inerte au clic. */
+.rowUpcoming .num,
+.rowUpcoming .meta {
+  color: var(--text-3);
+}
+
+.rowUpcoming .check {
+  opacity: 0.3;
+}

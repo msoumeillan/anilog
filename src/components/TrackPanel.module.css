@@ -1,0 +1,11 @@
+/* Le bouton d'ouverture. Discret quand l'œuvre est déjà suivie : l'action
+   principale de la fiche n'est plus l'ajout, c'est la consultation. */
+.open {
+  inline-size: 100%;
+  justify-content: flex-start;
+  gap: var(--sp-2);
+}
+
+.openLabel {
+  margin-inline-end: auto;
+}

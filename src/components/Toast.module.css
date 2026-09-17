@@ -1,0 +1,51 @@
+/* Le bandeau de confirmation — voir Toast.tsx. */
+
+/*
+ * En haut, sous la barre de navigation — 60 px, voir `.headerInner` dans
+ * `App.module.css` — et pas en bas : le lecteur occupe le bas de l'écran, et un
+ * bandeau posé sur ses commandes cacherait ce qu'on est en train d'écouter.
+ *
+ * Au-dessus de tout (50) : il doit se lire par-dessus la fenêtre des playlists
+ * (41) comme par-dessus le lecteur agrandi (40). La zone ne capte aucun clic —
+ * elle couvre la largeur de l'écran pour centrer le bandeau, et sans ça elle
+ * rendrait la navigation inerte pendant trois secondes.
+ */
+.zone {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-start: calc(60px + var(--sp-3));
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--sp-4);
+  pointer-events: none;
+}
+
+.toast {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  max-inline-size: min(560px, 100%);
+  margin: 0;
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-3);
+  color: var(--text);
+  font-size: var(--text-sm);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 50%);
+  animation: entree var(--dur-2) var(--ease);
+}
+
+/* La coche porte l'accent : ce qu'elle confirme est une décision à soi. */
+.coche {
+  flex: none;
+  color: var(--accent-hi);
+}
+
+@keyframes entree {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}

@@ -1,0 +1,234 @@
+/**
+ * Base — remise à zéro et primitives partagées.
+ * Tout ce qui est ici n'utilise QUE des tokens.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Une banniere pleine largeur fait `100vw`, qui compte la barre de
+     defilement : sans ca, une quinzaine de pixels de defilement horizontal sur
+     toute l'app. `clip` plutot que `hidden` — `hidden` ferait du body un
+     conteneur de defilement et l'en-tete collant cesserait de coller. */
+  overflow-x: clip;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent-hi);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Primitives ───────────────────────────────────────────── */
+
+.page {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* Le style de label : toujours ces trois valeurs ensemble. */
+.label {
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  font-weight: var(--label-weight);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.display {
+  font-size: var(--display);
+  font-weight: 800;
+  letter-spacing: var(--tracking-display);
+  line-height: 0.96;
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-tight);
+}
+
+/*
+ * Lu par un lecteur d'écran, invisible à l'œil.
+ *
+ * Pour le titre de page qu'un dessin n'affiche pas : l'accueil commence par
+ * « Summer 2026 », un onglet de bibliothèque par sa barre d'onglets. Sans
+ * `<h1>`, un lecteur d'écran qui saute de titre en titre arrive sur la page
+ * sans savoir laquelle c'est. `clip-path` et non `display: none` : ce qui
+ * n'est pas rendu n'est pas lu non plus.
+ */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.muted {
+  color: var(--text-2);
+}
+.faint {
+  color: var(--text-3);
+}
+
+/* Repère visuel pour un média sans image : jamais un carré vide. */
+.placeholder {
+  background: var(--surface-2);
+  background-image:
+    linear-gradient(135deg, transparent 49.6%, var(--surface-3) 49.6% 50.4%, transparent 50.4%),
+    linear-gradient(45deg, transparent 49.6%, var(--surface-3) 49.6% 50.4%, transparent 50.4%);
+}
+
+/*
+ * Les cadres d'image : une affiche en 2/3, une vignette d'épisode en 16/9.
+ *
+ * `flex: none` parce que ces cadres sont souvent des éléments flexibles — la
+ * colonne d'une fiche, une ligne de journal — et qu'un élément flexible se
+ * laisse COMPRIMER. Le rapport ne les protège pas : `overflow: hidden` ramène
+ * leur taille minimale automatique à zéro. Mesuré sur la fiche anime, en
+ * contraignant la hauteur de sa colonne : le cadre tombait à 0, et avant ça
+ * l'affiche se voyait rognée par le haut et par le bas, puisqu'elle est posée
+ * en `object-fit: cover`. Un cadre d'affiche garde ses proportions, quoi qu'il
+ * arrive autour.
+ */
+.poster {
+  aspect-ratio: 2 / 3;
+  flex: none;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.still {
+  aspect-ratio: 16 / 9;
+  flex: none;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+/* ── Boutons ──────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: var(--tap);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease),
+    background var(--dur-1) var(--ease);
+}
+.btn:hover {
+  border-color: var(--text-3);
+}
+
+.btn--accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+.btn--accent:hover {
+  background: var(--accent-hi);
+  border-color: var(--accent-hi);
+}
+
+.btn--quiet {
+  border-color: transparent;
+  color: var(--text-2);
+}
+.btn--quiet:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+/* ── Rangée d'épisodes ────────────────────────────────────── */
+
+.ep {
+  position: relative;
+  min-width: var(--tap);
+  min-height: 40px;
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease);
+}
+.ep:hover {
+  border-color: var(--text-3);
+  color: var(--text);
+}
+.ep[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 700;
+}
+
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 0;
+}

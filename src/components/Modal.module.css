@@ -1,0 +1,92 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.68);
+  /* Le fond reste lisible en filigrane : on sait d'où l'on vient. */
+  backdrop-filter: blur(2px);
+  z-index: 40;
+}
+
+.content {
+  position: fixed;
+  z-index: 41;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+
+  inline-size: min(560px, calc(100vw - var(--sp-5)));
+  /* Le corps défile, pas la fenêtre : l'en-tête et sa croix restent en place. */
+  max-block-size: min(86vh, 760px);
+  display: flex;
+  flex-direction: column;
+
+  background: var(--surface-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.5);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  border-block-end: 1px solid var(--line);
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-tight);
+}
+
+.sub {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-3);
+}
+
+.close {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-4);
+  overflow-y: auto;
+}
+
+/* ── Fenêtre large ────────────────────────────────────────── */
+
+/* Pour un contenu qui se met lui-même en deux colonnes. Empilé, tout ne tenait
+   pas d'un seul regard et il fallait défiler pour atteindre les boutons. */
+.wide {
+  inline-size: min(880px, calc(100vw - var(--sp-5)));
+}

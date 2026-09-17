@@ -1,0 +1,204 @@
+/* Onglets et filtre, au-dessus de la grille. Ils ne défilent pas avec elle :
+   changer de langue au bout de 200 vignettes ne doit pas demander de remonter. */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.tab {
+  min-block-size: 38px;
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 700;
+}
+
+/* ── La grille ────────────────────────────────────────────── */
+
+/* Elle défile SEULE, pas la fenêtre : une galerie se parcourt, mais les
+   onglets et le filtre doivent rester sous la main pendant qu'on la parcourt. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: var(--sp-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-block-size: 56vh;
+  overflow-y: auto;
+  /* Les vignettes en bord droit ne collent pas à la barre de défilement. */
+  padding-inline-end: var(--sp-2);
+}
+
+/* Un arrière-plan en 16/9 dans une case d'affiche serait un timbre-poste. */
+.wideGrid {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.tile {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.tile img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.tile:hover {
+  border-color: var(--line-strong);
+}
+
+/* L'ocre est réservé à ce qui appartient à l'utilisateur — ici, son choix. */
+.tile[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+
+.empty {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 2 / 3;
+}
+
+.badge {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  padding-block: var(--sp-2);
+  background: rgb(0 0 0 / 0.72);
+  color: var(--text);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mark {
+  position: absolute;
+  inset-block-start: var(--sp-2);
+  inset-inline-end: var(--sp-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 24px;
+  block-size: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+/* La case : elle porte la vignette ET la loupe, qui ne peut pas vivre dans le
+   bouton de choix — un bouton dans un bouton est du HTML invalide. */
+.cell {
+  position: relative;
+}
+
+.zoom {
+  position: absolute;
+  inset-block-start: var(--sp-2);
+  inset-inline-start: var(--sp-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 26px;
+  block-size: 26px;
+  border: 0;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.6);
+  color: var(--text-2);
+  cursor: pointer;
+  /* Discrète tant qu'on ne la cherche pas : la vignette est le sujet. */
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.cell:hover .zoom,
+.zoom:focus-visible {
+  opacity: 1;
+  color: var(--text);
+}
+
+/* Sans survol — tactile — elle reste visible : autrement elle serait
+   introuvable là où justement l'écran est le plus petit. */
+@media (hover: none) {
+  .zoom {
+    opacity: 1;
+  }
+}
+
+/* ── Confirmation ─────────────────────────────────────────── */
+
+/* La vignette retenue attend ici. La barre ferme la fenetre par le bas :
+   c'est la derniere chose qu'on lit avant de trancher. */
+.confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent-dim);
+}
+
+/* Montrer ce qu'on s'apprete a remplacer, pas seulement le dire : la vignette
+   retenue peut avoir quitte la grille apres un changement de filtre. */
+.confirmThumb {
+  inline-size: 36px;
+  block-size: 54px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  flex: 0 0 auto;
+}
+
+.confirmText {
+  flex: 1 1 200px;
+  min-inline-size: 0;
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+/* Retenue, pas encore en service : un contour, la ou la coche dit « en
+   service ». Deux etats distincts qui ne doivent pas se confondre. */
+.staged {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 2px;
+}

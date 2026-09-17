@@ -1,0 +1,12 @@
+.synopsis {
+  max-inline-size: 66ch;
+  font-size: var(--text-md);
+  line-height: var(--lh-body);
+  color: var(--text-2);
+}
+
+/* L'espace entre deux paragraphes, et lui seul : le premier ne doit pas
+   décoller du trait qui le précède. */
+.synopsis + .synopsis {
+  margin-block-start: 0.9em;
+}

@@ -1,0 +1,7 @@
+dist
+coverage
+
+# Table de correspondance AniList -> TMDB : 6837 entrees produites par
+# `npm run build:tmdb-map`. Reformatee, elle passerait de 117 Ko a plusieurs
+# megaoctets et son diff deviendrait illisible a chaque regeneration.
+src/data/tmdbMap.json

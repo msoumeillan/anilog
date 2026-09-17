@@ -1,0 +1,105 @@
+.facade,
+.frame {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 720px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.facade {
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.facade:hover {
+  border-color: var(--accent);
+}
+
+.poster {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* Assombri au repos, éclairci au survol : l'image devient une invitation
+   plutôt qu'une illustration. */
+.veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(11 11 12 / 20%), rgb(11 11 12 / 62%));
+  transition: background var(--dur-2) var(--ease);
+}
+
+.facade:hover .veil {
+  background: linear-gradient(180deg, rgb(11 11 12 / 8%), rgb(11 11 12 / 48%));
+}
+
+.play {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  translate: -50% -50%;
+  inline-size: 62px;
+  block-size: 62px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  /* Le triangle est optiquement décentré : on le repousse d'un poil. */
+  padding-inline-start: 4px;
+  transition: scale var(--dur-2) var(--ease);
+}
+
+.facade:hover .play {
+  scale: 1.06;
+}
+
+.caption {
+  position: absolute;
+  inset-block-end: var(--sp-3);
+  inset-inline-start: var(--sp-4);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-tracking);
+  font-weight: var(--label-weight);
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.iframe {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+}
+
+/* Repli pour les rares bandes-annonces hors YouTube : un simple lien. */
+.fallback {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-block-size: var(--tap);
+  padding-inline: var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+.fallback:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.out {
+  color: var(--text-3);
+}

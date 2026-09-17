@@ -1,0 +1,810 @@
+/* Le lecteur qui survit à la navigation — voir PlayerBar.tsx. */
+
+/* ── Réduit : une barre en bas de page ────────────────────── */
+
+.barre {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-block-start: 1px solid var(--line-strong);
+  background: var(--surface-1);
+  /* Une barre translucide laisserait passer le texte de la page dessous, ce
+     qui rend le titre de la chanson illisible sur une grille d'affiches. */
+  backdrop-filter: none;
+}
+
+.video {
+  flex: none;
+  inline-size: 160px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  background: #000;
+  /* Elle se clique — elle ouvre le lecteur, ou lit et suspend —, et rien
+     d'autre ne le dit depuis qu'elle n'a plus de commandes dessinées dessus. */
+  cursor: pointer;
+}
+
+.infos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+  flex: 1;
+}
+
+.titre {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  min-inline-size: 0;
+  font-weight: 700;
+}
+
+.nom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  flex: none;
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent-hi);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.badge[data-kind='ED'] {
+  border-color: var(--line-strong);
+  color: var(--text-3);
+}
+
+/* Artiste et anime : sur une ligne quand la place manque, l'un sous l'autre
+   quand le lecteur prend l'écran. */
+.sous {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  margin: 0;
+  min-inline-size: 0;
+  font-size: var(--text-sm);
+}
+
+.artistes {
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.anime {
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.anime:hover {
+  color: var(--accent-hi);
+}
+
+/* Le point ne sépare que deux choses posées sur la même ligne : agrandi, elles
+   ne le sont plus, et il disparaît. */
+.artistes + .anime::before {
+  content: '·';
+  margin-inline-end: var(--sp-2);
+  color: var(--text-3);
+}
+
+.notes {
+  display: flex;
+  gap: 2px;
+  margin-block-start: 2px;
+}
+
+.note {
+  inline-size: 20px;
+  block-size: 18px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.note:hover {
+  border-color: var(--accent);
+  color: var(--accent-hi);
+}
+
+.note[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.commandes {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.icone {
+  display: grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.icone:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-hi);
+}
+
+.icone[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent-hi);
+}
+
+.icone:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/*
+ * Lecture/pause, le geste qu'on vise le plus : rond et plein, pour se trouver
+ * du coin de l'œil au milieu de boutons fantômes. Blanc et non accent — l'accent
+ * est réservé à ce qui nous appartient, et « ça joue » n'est pas une décision.
+ */
+.lecture {
+  border-color: var(--text);
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+}
+
+.lecture:hover:not(:disabled) {
+  border-color: var(--text-2);
+  background: var(--text-2);
+  color: var(--bg);
+}
+
+.rang {
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── La frise : où l'on en est ────────────────────────────── */
+
+/*
+ * En barre, un trait sur le bord haut, de toute la largeur : la place qu'il a
+ * dans toutes les applis de musique, et la seule assez longue pour viser une
+ * seconde précise. La zone qu'on attrape déborde de part et d'autre du trait —
+ * trois pixels ne se visent pas.
+ */
+.frise {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  display: flex;
+  align-items: center;
+  translate: 0 -50%;
+}
+
+.temps {
+  flex: none;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Le curseur — voir `Glissiere` : le rail et sa partie remplie sont peints
+   ici, l'`<input>` transparent passe par-dessus. */
+.piste {
+  position: relative;
+  flex: 1;
+  min-inline-size: 0;
+  block-size: 16px;
+}
+
+.piste::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 50%;
+  block-size: 3px;
+  border-radius: 999px;
+  background: var(--line-strong);
+  translate: 0 -50%;
+  transition: block-size var(--dur-1) var(--ease);
+}
+
+/* Blanc et non accent, comme le bouton lecture : où l'on en est n'est pas une
+   décision. */
+.rempli {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 50%;
+  block-size: 3px;
+  border-radius: 999px;
+  background: var(--text);
+  translate: 0 -50%;
+  pointer-events: none;
+  transition: block-size var(--dur-1) var(--ease);
+}
+
+/* Survolé, le trait s'épaissit : il annonce qu'il s'attrape. */
+.piste:hover::before,
+.piste:hover .rempli {
+  block-size: 5px;
+}
+
+/* Après `.piste`, qu'il corrige : le volume est une glissière courte, qui ne
+   dispute pas la place au trait. */
+.niveau {
+  flex: none;
+  inline-size: 88px;
+}
+
+.curseur {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.curseur:disabled {
+  cursor: default;
+}
+
+/* WebKit pose la poignée en HAUT d'un rail plus haut qu'elle : le rail prend
+   toute la hauteur, la poignée descend de la moitié de la différence. */
+.curseur::-webkit-slider-runnable-track {
+  block-size: 16px;
+  background: transparent;
+}
+
+.curseur::-moz-range-track {
+  background: transparent;
+}
+
+/*
+ * La poignée n'apparaît qu'au survol ou au clavier : au repos, la frise est un
+ * trait, pas une glissière. Des règles JUMELLES et non une liste de sélecteurs :
+ * un pseudo-élément que le moteur ne connaît pas invalide la règle entière.
+ */
+.curseur::-webkit-slider-thumb {
+  inline-size: 12px;
+  block-size: 12px;
+  margin-block-start: 2px;
+  border: none;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0;
+  appearance: none;
+}
+
+.curseur::-moz-range-thumb {
+  inline-size: 12px;
+  block-size: 12px;
+  border: none;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0;
+}
+
+.piste:hover .curseur:enabled::-webkit-slider-thumb,
+.curseur:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.piste:hover .curseur:enabled::-moz-range-thumb,
+.curseur:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+
+/* ── Agrandi : le lecteur prend l'écran ───────────────────── */
+
+/*
+ * Une fenêtre posée par-dessus la page, et non une barre qui grandit : ancré en
+ * bas, l'agrandissement coupait la page en deux au milieu d'une ligne. Cliquer
+ * à côté referme.
+ *
+ * Le fond est OPAQUE. À 94 %, la page transparaissait, et ses textes se
+ * mêlaient à ceux du côté. La page elle-même est figée et inerte tant que le
+ * lecteur la couvre — voir la coquille, dans App.
+ */
+.grand {
+  /* La marge du haut et du bas, nommée : la largeur de l'image la retranche
+     de la hauteur disponible — voir `--largeur-image`. */
+  --marge-bloc: clamp(var(--sp-3), 3vh, 40px);
+
+  inset: 0;
+  align-items: stretch;
+  justify-content: center;
+  padding: var(--marge-bloc) clamp(var(--sp-3), 4vw, 56px);
+  border: none;
+  background: var(--bg);
+  /* Arrivé au bout de son propre défilement — sur un écran étroit, le lecteur
+     défile —, le geste s'arrête là au lieu de passer à la page. */
+  overscroll-behavior: contain;
+}
+
+/*
+ * La vidéo et ce qui l'entoure, d'un bloc.
+ *
+ * `display: contents` tant que le lecteur est une barre : le groupe n'existe
+ * qu'agrandi et en plein écran. Un vrai conteneur en mode barre casserait
+ * l'alignement d'une ligne unique — et surtout, envelopper ou dégrouper le
+ * `<video>` selon la taille le remonterait, ce qui relancerait la lecture.
+ */
+.scene {
+  display: contents;
+}
+
+/* Même principe un cran plus bas : l'habillage — tout sauf la vidéo — n'est
+   une vraie boîte qu'en plein écran, où il flotte sur l'image. Voir la fin de
+   la feuille. */
+.habillage {
+  display: contents;
+}
+
+/* Et encore un cran : le côté n'est une boîte qu'agrandi, où il fait colonne. */
+.cote {
+  display: contents;
+}
+
+/*
+ * Agrandi, DEUX COLONNES : l'image et ses commandes à gauche, le côté à droite.
+ *
+ * Tout ce qui ne commande pas la vidéo — titre, notes, fichiers, origine — part
+ * dans le côté, et c'est ce qui agrandit l'image : sous elle ne restent que la
+ * frise et la file. Empilé dessous, le reste lui prenait sa hauteur — mesuré :
+ * 994 px de large à 1920 × 945, 612 à 1536 × 730, 482 à 1366 × 657.
+ *
+ * Les lignes de 1fr, en haut et en bas, centrent le bloc de l'image quand il ne
+ * prend pas toute la hauteur ; le côté les traverse toutes.
+ */
+.grand .scene {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 24vw, 400px);
+  grid-template-rows: minmax(0, 1fr) auto auto auto minmax(0, 1fr);
+  column-gap: clamp(var(--sp-5), 2.5vw, var(--sp-7));
+  min-inline-size: 0;
+
+  /*
+   * La LARGEUR de l'image, partagée avec la frise qui la suit : le trait doit
+   * finir où finit la vidéo. Bornée par la hauteur disponible, sinon une vidéo
+   * 16/9 dans une fenêtre large dépasse par le bas et se fait couper. `min()`
+   * prend la plus petite des trois contraintes : la place de la colonne, la
+   * hauteur restante ramenée en largeur, et la largeur d'une source 1080p. Les
+   * 96 px sont ce qui reste sous l'image : la frise (32) et son écart (12), la
+   * file (44) et le sien (8).
+   */
+  --largeur-image: min(100%, calc((100vh - 2 * var(--marge-bloc) - 96px) * 16 / 9), 1920px);
+}
+
+/* ── Le choix du fichier ──────────────────────────────────── */
+
+/*
+ * Des pastilles plutôt qu'un menu derrière un engrenage : il y en a deux ou
+ * trois, et un menu à ouvrir pour deux lignes cache un choix au lieu de le
+ * proposer. Elles ne sont là qu'agrandi — c'est là qu'on regarde l'image, donc
+ * là qu'on se demande si l'autre fichier serait meilleur.
+ */
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.source {
+  min-block-size: 28px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease);
+}
+
+.source:hover {
+  border-color: var(--text-3);
+  color: var(--text);
+}
+
+/* Ce qui joue porte l'accent : c'est une de TES décisions. */
+.source[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent-hi);
+  font-weight: 700;
+}
+
+/* ── Le panneau : d'où vient ce qu'on écoute ──────────────── */
+
+.panneau {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.liste {
+  margin: 0 0 var(--sp-3);
+  padding: 0;
+  list-style: none;
+}
+
+.grand .video {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: center;
+  inline-size: var(--largeur-image);
+  min-inline-size: 320px;
+  border-radius: var(--radius);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 55%);
+}
+
+/* La frise quitte le bord et se range sous l'image, à sa largeur : la ligne de
+   commandes d'une vidéo, qui ne couvre plus l'image. */
+.grand .frise {
+  position: static;
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: center;
+  inline-size: var(--largeur-image);
+  min-inline-size: 320px;
+  margin-block-start: var(--sp-3);
+  gap: var(--sp-3);
+  translate: none;
+}
+
+/* Des commandes de vidéo et non la ligne d'action de la fenêtre : plus
+   petites, et sans cadre, pour que la file reste le bloc qu'on vise. */
+.grand .frise .icone {
+  inline-size: 32px;
+  block-size: 32px;
+  border-color: transparent;
+}
+
+/* Le côté : une colonne qui défile pour elle-même, sur toute la hauteur. Une
+   origine longue n'y pousse rien — mesuré avec 1 600 px de contenu en plus :
+   l'image et la frise n'ont pas bougé d'un pixel, le côté a défilé. */
+.grand .cote {
+  display: flex;
+  grid-column: 2;
+  grid-row: 1 / -1;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-inline-start: clamp(var(--sp-4), 2vw, var(--sp-5));
+  border-inline-start: 1px solid var(--line);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.grand .infos {
+  flex: none;
+  gap: var(--sp-2);
+}
+
+.grand .titre {
+  flex-direction: row;
+  font-size: var(--text-xl);
+  line-height: 1.15;
+}
+
+.grand .nom {
+  /* Un titre de générique tient sur deux lignes ; le couper à la première
+     cacherait ce qu'on est venu lire. */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.grand .sous {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-size: var(--text-md);
+}
+
+.grand .artistes {
+  color: var(--text-1);
+  white-space: normal;
+}
+
+.grand .anime {
+  font-size: var(--text-sm);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  white-space: normal;
+}
+
+.grand .artistes + .anime::before {
+  content: none;
+}
+
+/* Dix cases qui se partagent la largeur du côté : à taille fixe, 34 px et
+   leurs écarts faisaient 412 px — plus que la colonne. */
+.grand .notes {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: var(--sp-1);
+  margin-block-start: var(--sp-2);
+}
+
+.grand .note {
+  inline-size: auto;
+  block-size: 30px;
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+}
+
+/* Les commandes, agrandies elles aussi : elles ne sont plus un coin de barre
+   mais la ligne d'action de la fenêtre. */
+.grand .commandes {
+  grid-column: 1;
+  grid-row: 4;
+  justify-self: center;
+  margin-block-start: var(--sp-2);
+  gap: var(--sp-4);
+}
+
+.grand .file {
+  gap: var(--sp-3);
+  padding-inline: var(--sp-3);
+  border-inline: 1px solid var(--line);
+}
+
+.grand .icone {
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 999px;
+}
+
+.grand .rang {
+  font-size: var(--text-sm);
+}
+
+/* ── Écrans étroits ───────────────────────────────────────── */
+
+/*
+ * Sous mille pixels, le côté passe SOUS l'image plutôt qu'à côté : à droite,
+ * il ne laisserait plus assez de largeur pour que l'image vaille
+ * l'agrandissement. Une seule colonne, qui défile d'un bloc.
+ */
+@media (max-width: 1000px) {
+  .grand {
+    flex-direction: column;
+    overflow-y: auto;
+    /* `safe` : centré tant que tout tient, calé en haut dès que ça déborde.
+       Un centrage simple répartissait le surplus des DEUX côtés, et celui du
+       haut ne se fait pas défiler — mesuré à 870 × 910 : le haut de la vidéo
+       à -143 px, sans aucun moyen d'y remonter. */
+    justify-content: safe center;
+  }
+
+  .grand .scene {
+    flex: none;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .grand .video {
+    grid-row: 1;
+  }
+
+  .grand .frise {
+    grid-row: 2;
+  }
+
+  .grand .commandes {
+    grid-row: 3;
+  }
+
+  .grand .cote {
+    grid-column: 1;
+    grid-row: 4;
+    justify-self: center;
+    inline-size: min(100%, 560px);
+    margin-block-start: var(--sp-6);
+    padding-inline-start: 0;
+    border-inline-start: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Sur un écran étroit, la vidéo et les commandes ne tiennent pas côte à
+     côte : on garde le son et le titre, l'image passe au mode agrandi. */
+  /* Une vignette plutôt qu'une vidéo : chaque pixel rendu au titre compte. À
+     96 px, il n'en restait que 79 pour lui : « M… ». */
+  .barre:not(.grand) .video {
+    inline-size: 64px;
+  }
+
+  .barre:not(.grand) .notes {
+    display: none;
+  }
+
+  /* En barre, un téléphone n'a la place que d'un MINI-LECTEUR : lire, passer,
+     agrandir, fermer. L'étoile, la playlist, reculer et le rang sont à un
+     geste, dans le lecteur agrandi — les laisser ici poussait les boutons
+     hors de l'écran : mesuré à 375 px, la croix finissait 58 px au-delà du
+     bord, et le titre n'avait plus de place du tout. */
+  .barre:not(.grand) .facultatif {
+    display: none;
+  }
+
+  /* Les commandes sur deux lignes : la file d'abord, ce qu'on vise en
+     écoutant ; l'étoile, la playlist, réduire et fermer dessous. Sept boutons
+     de 44 px ne tiennent pas sur une ligne, et les rétrécir en ferait des
+     cibles trop petites pour un doigt. */
+  .grand .commandes {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-2);
+  }
+
+  .grand .file {
+    flex-basis: 100%;
+    justify-content: center;
+    order: -1;
+    border-inline: none;
+  }
+
+  /* Le curseur de volume n'y tient pas, et n'y sert guère : les boutons du
+     téléphone règlent le son, et Safari sur iPhone ignore le volume qu'une
+     page lui donne. Le bouton muet, lui, reste. */
+  .niveau {
+    display: none;
+  }
+}
+
+/* Sans survol — au doigt —, la poignée reste visible dans le lecteur agrandi :
+   sinon on glisserait sur un trait sans voir ce qu'on tient. */
+@media (hover: none) {
+  .grand .curseur:enabled::-webkit-slider-thumb {
+    opacity: 1;
+  }
+
+  .grand .curseur:enabled::-moz-range-thumb {
+    opacity: 1;
+  }
+}
+
+/* ── Plein écran : la scène entière ───────────────────────── */
+
+/*
+ * EN DERNIER dans la feuille, et c'est voulu : ces règles défont celles du
+ * lecteur agrandi — la colonne, la largeur bornée de l'image — à spécificité
+ * égale, et c'est l'ordre qui tranche.
+ *
+ * L'image prend l'écran ; l'habillage flotte dessus, le titre en haut, la frise
+ * et la file en bas, sur un voile sombre qui les garde lisibles sur une image
+ * claire.
+ */
+.scene:fullscreen {
+  display: block;
+  background: #000;
+}
+
+.scene:fullscreen .video {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
+  block-size: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  object-fit: contain;
+}
+
+/* Le voile ne prend pas les clics — ils vont à la vidéo, qui lit ou suspend —,
+   ce qu'il porte, si. */
+.scene:fullscreen .habillage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: clamp(var(--sp-4), 3vh, 40px) clamp(var(--sp-4), 4vw, 56px);
+  background:
+    linear-gradient(to bottom, rgb(0 0 0 / 60%), transparent 22%),
+    linear-gradient(to top, rgb(0 0 0 / 75%), transparent 32%);
+  pointer-events: none;
+  transition: opacity var(--dur-2) var(--ease);
+}
+
+.scene:fullscreen .habillage > * {
+  pointer-events: auto;
+}
+
+/* Le côté se réduit au titre, en haut à gauche, comme partout où l'on regarde
+   une vidéo : ni colonne, ni défilement, ni trait qui la sépare. */
+.scene:fullscreen .cote {
+  order: -1;
+  padding-inline-start: 0;
+  border-inline-start: none;
+  overflow: visible;
+}
+
+/* La frise et la file en bas, sur toute la largeur. */
+.scene:fullscreen .frise {
+  inline-size: 100%;
+  min-inline-size: 0;
+  margin-block-start: auto;
+}
+
+/* La file au centre, comme dans le lecteur agrandi. Son trait de droite
+   séparait réduire et fermer, qui ne sont pas là : il n'a plus rien à séparer. */
+.scene:fullscreen .commandes {
+  align-self: center;
+}
+
+.scene:fullscreen .file {
+  border-inline-end: none;
+}
+
+/* Sur une image, un rail gris foncé disparaît : un blanc translucide se voit
+   sur le clair comme sur le sombre. */
+.scene:fullscreen .piste::before {
+  background: rgb(255 255 255 / 28%);
+}
+
+.scene:fullscreen .temps {
+  color: var(--text-2);
+}
+
+/* Noter, choisir le fichier, lire l'origine, ranger, réduire, fermer : des
+   gestes de fenêtre, pas de spectateur. Ils attendent la sortie du plein
+   écran. */
+.scene:fullscreen .notes,
+.scene:fullscreen .sources,
+.scene:fullscreen .panneau,
+.scene:fullscreen .fenetre {
+  display: none;
+}
+
+/* Au repos — la souris immobile, la lecture en cours —, l'habillage s'efface et
+   le curseur avec lui. Survoler les commandes les garde : on ne les voit pas
+   disparaître sous la main qui s'apprête à cliquer. */
+.scene:fullscreen[data-repos='true'] .habillage:not(:hover) {
+  opacity: 0;
+}
+
+.scene:fullscreen[data-repos='true'] .video {
+  cursor: none;
+}

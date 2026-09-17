@@ -1,0 +1,90 @@
+/* « Ajouter à une playlist » — voir PlaylistPicker.tsx. */
+
+.liste {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 var(--sp-4);
+  padding: 0;
+  list-style: none;
+}
+
+.choix {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  inline-size: 100%;
+  min-block-size: var(--tap);
+  padding-inline: var(--sp-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-2);
+  font-size: var(--text-base);
+  text-align: start;
+  cursor: pointer;
+}
+
+.choix:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.case {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: 20px;
+  block-size: 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--text-on-accent);
+}
+
+/* Cochée, la case prend l'accent : ce rangement est une décision à soi. */
+.choix[aria-checked='true'] .case {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.choix[aria-checked='true'] {
+  color: var(--text);
+}
+
+.nom {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.compte {
+  flex: none;
+  color: var(--text-3);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.nouvelle {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.champ {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: var(--tap);
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--text-base);
+}
+
+.champ:focus {
+  border-color: var(--text-3);
+  outline: none;
+}

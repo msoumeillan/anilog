@@ -1,0 +1,61 @@
+/**
+ * Fiche studio — ce qui lui est propre.
+ *
+ * L'anatomie partagée (en-tête, sections, faits) vient d'Entity.module.css ;
+ * ici seulement la barre de tri/filtres et le découpage par année.
+ */
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  padding-block-end: var(--sp-4);
+  border-block-end: 1px solid var(--line);
+}
+
+.clear {
+  min-block-size: 38px;
+  font-size: var(--text-sm);
+}
+
+.yearBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-block-start: var(--sp-4);
+}
+
+/* L'année sert de repère de balayage : assez grande pour se voir en défilant,
+   assez discrète pour ne pas concurrencer les titres. */
+.year {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-2);
+  padding-block-end: var(--sp-2);
+  border-block-end: 1px solid var(--line);
+}
+
+/* Étiquette personnelle cliquable — sert de filtre dans la bibliothèque. */
+.tagChip {
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.tagChip:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.tagChip[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--text);
+}

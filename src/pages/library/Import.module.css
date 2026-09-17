@@ -1,0 +1,35 @@
+/*
+ * Les styles propres à Import — voir Import.tsx.
+ *
+ * Longtemps rangés dans Library.module.css, qui avait grossi jusqu'à 1 167
+ * lignes pour quatorze fichiers. La jauge d’import et la liste des titres perdus ne servent qu’ici. Séparés le 14 septembre 2026 :
+ * depuis que les pages se chargent à la demande, chaque onglet ne télécharge
+ * plus que ses propres règles. Ce qui est partagé reste dans Library.module.css.
+ */
+
+/* Une barre de progression maison : `<progress>` ne se met pas au style du
+   reste sans une pile de prefixes, et il n'y a ici qu'un rectangle a remplir. */
+.jauge {
+  block-size: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.jaugeFill {
+  block-size: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: inline-size var(--dur-1) var(--ease);
+}
+
+/* Les titres qu'AniList ne connait pas : nommes, donc en pastilles comme les
+   studios — une liste a puces les ferait passer pour des erreurs. */
+.perdus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  max-block-size: 40vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}

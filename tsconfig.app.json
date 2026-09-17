@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    /* Sans `incremental`, `tsc -b` cherche des fichiers compilés que `noEmit`
+       ne produit jamais, et revérifie tout le projet à chaque lancement. */
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "types": ["vite/client"],
+    "allowArbitraryExtensions": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  /* Les copies de conflit de l'outil de synchronisation : déjà ignorées par
+     git (voir le .gitignore racine), elles doivent l'être aussi du compilateur.
+     Une copie périmée d'une page cassait sinon la vérification des types dès
+     que l'original changeait d'API. */
+  "exclude": ["src/**/*# Edit conflict*"]
+}

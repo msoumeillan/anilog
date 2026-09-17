@@ -1,0 +1,35 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-block: var(--sp-6);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+/* Le titre porte parfois une icône : elle doit s'aligner sur le texte, pas
+   sur sa boîte. */
+.head h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.all {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.all:hover {
+  color: var(--accent-hi);
+}

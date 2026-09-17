@@ -1,0 +1,168 @@
+/*
+ * Les styles propres à Stats — voir Stats.tsx.
+ *
+ * Longtemps rangés dans Library.module.css, qui avait grossi jusqu'à 1 167
+ * lignes pour quatorze fichiers. Les barres, la frise des années et le rythme mensuel ne servent qu’ici. Séparés le 14 septembre 2026 :
+ * depuis que les pages se chargent à la demande, chaque onglet ne télécharge
+ * plus que ses propres règles. Ce qui est partagé reste dans Library.module.css.
+ */
+
+/* Des barres HORIZONTALES : les libelles sont du texte — « Plan to watch »,
+   « MAPPA » — et un texte se lit a l'horizontale. En vertical il faudrait
+   l'incliner, et il ne se lirait plus. */
+.barres {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.barre {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr 2.5rem;
+  gap: var(--sp-3);
+  align-items: center;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+a.barre:hover {
+  color: var(--accent-hi);
+}
+
+.barreNom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barrePiste {
+  block-size: 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.barreFill {
+  display: block;
+  block-size: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  /* Une occurrence unique doit rester visible : sans minimum, une barre a 2 %
+     de la plus haute disparait. */
+  min-inline-size: 3px;
+}
+
+.barreCompte {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* La note moyenne d'un genre, entre la barre et le compte. Plus discrete que
+   le compte : c'est une precision, pas la mesure principale. */
+.barresNotes .barre {
+  grid-template-columns: 8.5rem 1fr 2rem 2.5rem;
+}
+
+.barreNote {
+  text-align: end;
+  font-size: var(--text-xs);
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* La frise des annees : beaucoup de colonnes, peu de place, donc verticale. */
+.annees {
+  display: flex;
+  align-items: end;
+  gap: 2px;
+  block-size: 72px;
+}
+
+.annee {
+  display: flex;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  /* Une frise de trois ans ne doit pas dessiner trois dalles : sans plafond,
+     `flex: 1` etale chaque barre sur un tiers de la largeur et le graphique
+     ressemble a un bandeau. Trente ans restent bien en dessous. */
+  max-inline-size: 44px;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  block-size: 100%;
+  text-align: center;
+}
+
+.anneeFill {
+  border-radius: 2px 2px 0 0;
+  background: var(--accent);
+  min-block-size: 2px;
+}
+
+/* Le rythme : deux mesures empilees par mois. */
+.frise {
+  display: flex;
+  align-items: end;
+  gap: var(--sp-2);
+  block-size: 120px;
+}
+
+.friseMois {
+  display: flex;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--sp-1);
+  block-size: 100%;
+  text-align: center;
+}
+
+.frisePile {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 2px;
+  block-size: 100%;
+}
+
+.friseEp,
+.friseFin {
+  inline-size: 40%;
+  border-radius: 2px 2px 0 0;
+  min-block-size: 2px;
+}
+
+.friseEp {
+  background: var(--surface-3, rgb(255 255 255 / 0.2));
+}
+
+.friseFin {
+  background: var(--accent);
+}
+
+/* La legende : deux pastilles aux memes couleurs que les barres. */
+.puceFin,
+.puceEp {
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 2px;
+  margin-inline-end: 2px;
+}
+
+.puceFin {
+  background: var(--accent);
+}
+
+.puceEp {
+  background: var(--surface-3, rgb(255 255 255 / 0.2));
+}
+
+/* L'annee sous sa colonne : plus petite que le reste, sinon quatre chiffres
+   sous une barre de quinze pixels debordent sur leurs voisines. */
+.anneeNom {
+  font-size: 9px;
+  letter-spacing: 0;
+  color: var(--text-3);
+}

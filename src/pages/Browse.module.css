@@ -1,0 +1,87 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding-block: var(--sp-6) var(--sp-9);
+}
+
+.wrap > h1 {
+  margin: 0;
+}
+
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  inset-inline-start: var(--sp-3);
+  color: var(--text-3);
+  pointer-events: none;
+}
+
+.search {
+  inline-size: 100%;
+  min-block-size: var(--tap);
+  padding-inline: var(--sp-8) var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  color: var(--text);
+  font-size: var(--text-base);
+}
+
+.search::placeholder {
+  color: var(--text-3);
+}
+
+.search:focus {
+  border-color: var(--text-3);
+  outline: none;
+}
+
+/* Les filtres défilent horizontalement sur mobile plutôt que de
+   s'empiler sur cinq lignes ; ils s'alignent en rangée dès 720 px. */
+.filters {
+  display: flex;
+  gap: var(--sp-3);
+  overflow-x: auto;
+  padding-block-end: var(--sp-1);
+  scrollbar-width: thin;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-block-end: var(--sp-2);
+  border-block-end: 1px solid var(--line);
+}
+
+.status p {
+  margin: 0;
+}
+
+.reset {
+  min-block-size: 32px;
+  font-size: var(--text-xs);
+}
+
+.more {
+  align-self: center;
+  min-inline-size: 220px;
+}
+
+.end {
+  text-align: center;
+  padding-block: var(--sp-5);
+}

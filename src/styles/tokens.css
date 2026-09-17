@@ -1,0 +1,114 @@
+/**
+ * Tokens AniLog — direction « Salle obscure ».
+ *
+ * DEUX RÈGLES, sans exception :
+ *
+ *   1. Aucune couleur en dur hors de ce fichier. Si tu écris un #hex dans un
+ *      composant, c'est qu'il manque un token ici.
+ *   2. Aucun `style={{ }}` dans les composants. C'est ce qui a rendu la v1
+ *      non-restylable : 225 attributs style="" éparpillés dans le JS.
+ *
+ * L'accent est réservé à CE QUI T'APPARTIENT — ton statut, ta note, ta
+ * progression, l'épisode courant. Dès qu'il sert à décorer, l'effet tombe.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Surfaces ────────────────────────────────────────────
+     Quatre niveaux d'élévation, pas plus. Le fond est un noir
+     très légèrement chaud : un #000 pur écrase les affiches.   */
+  --bg: #0b0b0c;
+  --surface-1: #141415;
+  --surface-2: #191919;
+  --surface-3: #232324;
+
+  /* ── Filets ─────────────────────────────────────────────
+     Presque invisibles : ils structurent sans encadrer.        */
+  --line: #1c1c1d;
+  --line-strong: #2a2a2b;
+
+  /* ── Texte ──────────────────────────────────────────────
+     Trois niveaux de hiérarchie. Le blanc est cassé, jamais pur. */
+  --text: #ece9e4;
+  --text-2: #b8b2a8;
+  --text-3: #7b766d;
+  --text-on-accent: #100c07;
+
+  /* ── Accent — TES données, et rien d'autre ─────────────── */
+  --accent: #c8873f;
+  --accent-hi: #e0a45c;
+  --accent-dim: rgba(200, 135, 63, 0.14);
+  accent-color: var(--accent);
+
+  /* ── Signaux ────────────────────────────────────────────
+     Désaturés pour rester dans la même famille que l'accent.
+     À employer avec parcimonie : un statut, une erreur.        */
+  --ok: #6f9b6a;
+  --warn: #b8934a;
+  --danger: #a85a52;
+
+  /* ── Typographie ────────────────────────────────────────
+     Une seule famille. Archivo tient du 10 px capitales au
+     64 px très serré, ce qui évite d'en empiler deux.          */
+  --font-ui: 'Archivo', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* Échelle fluide : la borne basse est la valeur mobile 375,
+     la haute la valeur desktop. Pas de media query à écrire.   */
+  --text-xs: 11.5px;
+  --text-sm: 12.5px;
+  --text-base: clamp(14px, 0.35vw + 12.7px, 15px);
+  --text-md: clamp(15px, 0.7vw + 12.4px, 16.5px);
+  --text-lg: clamp(17px, 1.1vw + 12.9px, 19px);
+  --text-xl: clamp(21px, 2.2vw + 12.7px, 30px);
+  --display: clamp(34px, 5.2vw + 14.5px, 64px);
+
+  /* Les labels sont un style, pas une taille : toujours ce triplet. */
+  --label-size: 10px;
+  --label-tracking: 0.16em;
+  --label-weight: 600;
+
+  --lh-tight: 1.15;
+  --lh-body: 1.65;
+  --tracking-display: -0.035em;
+
+  /* ── Espacement — base 4 ────────────────────────────────── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* Marge latérale de page : 16 sur mobile, 56 sur desktop. */
+  --gutter: clamp(16px, 4.4vw + 0px, 56px);
+  --page-max: 1200px;
+
+  /* ── Formes ─────────────────────────────────────────────
+     Presque carré. Le rayon généreux est ce qui datait la v1.  */
+  --radius: 2px;
+  --radius-md: 3px;
+  --radius-pill: 999px;
+
+  /* Une seule ombre, sous les affiches. Ailleurs : rien. */
+  --shadow-poster: 0 24px 60px -20px rgba(0, 0, 0, 0.9);
+
+  /* ── Mouvement ──────────────────────────────────────────── */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --dur-1: 0.14s;
+  --dur-2: 0.22s;
+
+  /* ── Cibles tactiles ────────────────────────────────────
+     44 px minimum sur mobile, jamais négociable.               */
+  --tap: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0s;
+    --dur-2: 0s;
+  }
+}

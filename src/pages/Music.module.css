@@ -1,0 +1,200 @@
+/* L'onglet Musiques — voir Music.tsx. */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  /* De la place sous la liste : le lecteur est fixé en bas et masquerait les
+     dernières lignes. */
+  padding-block-end: 160px;
+}
+
+.head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.actions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.jauge {
+  block-size: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.jaugeFill {
+  display: block;
+  block-size: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  transition: inline-size 200ms linear;
+}
+
+.panne {
+  color: var(--danger);
+}
+
+/* ── Chercher, et où chercher ─────────────────────────────── */
+
+/*
+ * La recherche à gauche, les catégories à droite : c'est la forme du catalogue
+ * d'AnimeThemes, et elle dit bien ce qu'elle fait — un texte, et la question
+ * « dans quoi ? ». Les deux passent l'un sous l'autre quand la place manque.
+ */
+.barre {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 260px;
+}
+
+.searchIcon {
+  position: absolute;
+  inset-inline-start: var(--sp-3);
+  color: var(--text-3);
+  pointer-events: none;
+}
+
+.search {
+  inline-size: 100%;
+  min-block-size: var(--tap);
+  padding-inline: calc(var(--sp-4) + 20px) var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  color: var(--text);
+  font-size: var(--text-base);
+}
+
+.search::placeholder {
+  color: var(--text-3);
+}
+
+.search:focus {
+  border-color: var(--text-3);
+  outline: none;
+}
+
+.onglets {
+  display: flex;
+  gap: var(--sp-1);
+  padding: var(--sp-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.onglet {
+  flex: none;
+  min-block-size: 34px;
+  padding-inline: var(--sp-4);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  font-weight: var(--label-weight);
+  cursor: pointer;
+  transition:
+    background var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease);
+}
+
+.onglet:hover {
+  color: var(--text);
+}
+
+/* L'onglet ouvert est le seul repère de « où suis-je » : il prend le fond, pas
+   l'accent, qui reste réservé à ce qui nous appartient. */
+.onglet[aria-pressed='true'] {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+/* ── Les filtres ──────────────────────────────────────────── */
+
+/* Ils défilent horizontalement sur mobile plutôt que de s'empiler sur cinq
+   lignes ; ils s'alignent en rangée dès qu'il y a la place. */
+.filtres {
+  display: flex;
+  align-items: end;
+  gap: var(--sp-3);
+  overflow-x: auto;
+  padding-block-end: var(--sp-1);
+  scrollbar-width: thin;
+}
+
+.pertinence {
+  flex: none;
+  min-block-size: 38px;
+  display: flex;
+  align-items: center;
+}
+
+/* ── La portée ouverte ────────────────────────────────────── */
+
+/*
+ * La bannière qui dit ce qu'on écoute et comment en sortir.
+ *
+ * Elle remplace la barre de filtres plutôt que de s'ajouter dessous : dans une
+ * portée, aucun de ces filtres n'a cours, et les laisser visibles mais inertes
+ * serait proposer une question sans réponse.
+ */
+.portee {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding: var(--sp-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+}
+
+.porteeNom {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin: 0;
+  min-inline-size: 0;
+  flex-wrap: wrap;
+}
+
+.porteeNom strong {
+  font-size: var(--text-md);
+}
+
+/* ── La liste ─────────────────────────────────────────────── */
+
+.liste {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}

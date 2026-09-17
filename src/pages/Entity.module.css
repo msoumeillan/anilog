@@ -1,0 +1,239 @@
+/**
+ * Gabarit partagé par les pages Character, Staff et Studio.
+ *
+ * Elles ont la même anatomie — un portrait, un nom, des métadonnées, une
+ * description, puis des grilles d'œuvres liées — donc une seule feuille
+ * plutôt que trois presque identiques qui divergeraient.
+ */
+
+.state {
+  padding-block: var(--sp-9);
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding-block: var(--sp-5) var(--sp-9);
+}
+
+.back {
+  align-self: flex-start;
+  min-block-size: 34px;
+  padding-inline: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--text-3);
+  border-color: transparent;
+}
+.back:hover {
+  color: var(--text);
+}
+
+/* ── En-tête ──────────────────────────────────────────────── */
+
+.head {
+  display: grid;
+  gap: var(--sp-4) var(--sp-5);
+  padding-block-end: var(--sp-5);
+  border-block-end: 1px solid var(--line);
+}
+
+@media (min-width: 720px) {
+  .head {
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.portrait {
+  inline-size: 132px;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+@media (min-width: 720px) {
+  .portrait {
+    inline-size: 180px;
+  }
+}
+
+.portrait img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+}
+
+.headText > * {
+  margin: 0;
+}
+
+.name {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: var(--lh-tight);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+}
+
+.fact {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: baseline;
+  font-size: var(--text-sm);
+  color: var(--text-2);
+}
+
+/* La description AniList contient du markdown brut et parfois des spoilers :
+   on la replie par défaut au-delà de quelques lignes. */
+.bio {
+  margin: 0;
+  max-inline-size: 68ch;
+  font-size: var(--text-sm);
+  line-height: var(--lh-body);
+  color: var(--text-2);
+  white-space: pre-line;
+}
+
+.bioClamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bioToggle {
+  align-self: flex-start;
+  min-block-size: 30px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: var(--text-xs);
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  font-weight: var(--label-weight);
+  cursor: pointer;
+}
+.bioToggle:hover {
+  color: var(--accent-hi);
+}
+
+/* ── Sections ─────────────────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+.sectionHead > * {
+  margin: 0;
+}
+
+/* Titre de section cliquable — la porte vers la liste complète.
+   Les grilles de personnages vivent maintenant dans CharacterCard. */
+.sectionLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  align-self: flex-start;
+  color: var(--text-2);
+}
+.sectionLink:hover {
+  color: var(--accent-hi);
+}
+.sectionLink h2 {
+  margin: 0;
+  color: inherit;
+}
+
+/* ── Doubleurs, sur la fiche personnage ───────────────────── */
+
+/* Une ligne : « Voiced by [langue] Nom, Nom ». La langue est un choix, pas
+   une colonne de plus — le japonais par défaut, le reste à la demande. */
+.voice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+}
+
+.lang {
+  min-block-size: 30px;
+  padding: 2px var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.lang:hover {
+  border-color: var(--line-strong);
+}
+
+.actors {
+  font-size: var(--text-sm);
+  color: var(--text-2);
+}
+
+.actorLink {
+  color: var(--text);
+  border-block-end: 1px solid var(--line-strong);
+}
+.actorLink:hover {
+  color: var(--accent-hi);
+  border-block-end-color: var(--accent);
+}
+
+/* Le rôle tenu dans une œuvre, sous la carte de la grille. */
+.role {
+  margin: 0;
+}
+
+/* Lien à l'intérieur d'une description : souligné discret plutôt que couleur
+   pleine, pour ne pas piquer l'accent réservé aux données personnelles. */
+.bioLink {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  color: var(--text);
+  border-block-end: 1px solid var(--line-strong);
+}
+.bioLink:hover {
+  color: var(--accent-hi);
+  border-block-end-color: var(--accent);
+}
+.bioLink[aria-disabled='true'] {
+  display: inline;
+  color: var(--text-2);
+  border-block-end-style: dotted;
+  cursor: default;
+}
+
+/* En-tête sans portrait (studio) : une seule colonne. */
+.headWide {
+  grid-template-columns: minmax(0, 1fr);
+}

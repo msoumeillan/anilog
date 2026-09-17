@@ -1,0 +1,91 @@
+/* Plus sombre et plus opaque que la modale ordinaire : ici l'image EST le
+   contenu, et un fond qui transparaît en fausserait les couleurs. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.92);
+  /* Au-dessus de la Modal (41) : la visionneuse s'ouvre depuis la galerie. */
+  z-index: 50;
+}
+
+.content {
+  position: fixed;
+  z-index: 51;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  /* Le fond referme au clic : le curseur doit le dire avant qu'on essaie. */
+  cursor: zoom-out;
+}
+
+/* Ce qui n'est pas le fond ne referme pas, et ne doit donc pas le promettre. */
+.image,
+.bar {
+  cursor: default;
+}
+
+/* `min-block-size: 0` sur un enfant de flex : sans lui l'image refuse de
+   rétrécir sous sa hauteur naturelle et déborde de l'écran par le bas. */
+.image {
+  min-block-size: 0;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+  object-fit: contain;
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.6);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: 0 0 auto;
+}
+
+.step {
+  padding-inline: var(--sp-3);
+}
+
+.caption {
+  font-size: var(--text-sm);
+  color: var(--text-3);
+}
+
+.close {
+  position: absolute;
+  inset-block-start: var(--sp-4);
+  inset-inline-end: var(--sp-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border: 0;
+  border-radius: var(--radius);
+  background: rgb(0 0 0 / 0.5);
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* Le titre que Radix exige pour annoncer la fenêtre, retiré de l'affichage
+   sans être retiré de l'arbre d'accessibilité — `display: none` le cacherait
+   aussi aux lecteurs d'écran. */
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

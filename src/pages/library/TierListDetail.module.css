@@ -1,0 +1,159 @@
+/*
+ * Les styles propres à TierListDetail — voir TierListDetail.tsx.
+ *
+ * Longtemps rangés dans Library.module.css, qui avait grossi jusqu'à 1 167
+ * lignes pour quatorze fichiers. Les rangs, leurs zones de dépôt et les cartes ne servent qu’à une tier list. Séparés le 14 septembre 2026 :
+ * depuis que les pages se chargent à la demande, chaque onglet ne télécharge
+ * plus que ses propres règles. Ce qui est partagé reste dans Library.module.css.
+ */
+
+.tiers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* Un rang : le bandeau colore a gauche, la zone de depot a droite. La grille
+   plutot que flex, pour que TOUS les bandeaux aient la meme largeur quelle que
+   soit la longueur de leur nom — sinon les zones ne s'alignent plus. */
+.tier {
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  gap: var(--sp-2);
+  align-items: stretch;
+}
+
+.tierLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-2);
+  border-radius: var(--radius);
+  color: #111;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  text-align: center;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.tierNom {
+  inline-size: 100%;
+  min-inline-size: 0;
+  border: none;
+  background: rgb(255 255 255 / 0.35);
+  border-radius: 3px;
+  color: #111;
+  font: inherit;
+  text-align: center;
+}
+
+.tierZone,
+.vivier {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--sp-2);
+  min-block-size: 84px;
+  padding: var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+}
+
+.vivier {
+  min-block-size: 108px;
+}
+
+/* Ce qui dit « c'est ici que ca tombera ». Sans ce retour, on lache a l'aveugle
+   des que deux rangs se touchent. */
+.tierZoneOver {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.tierOutils {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.couleur {
+  inline-size: 28px;
+  block-size: 26px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: none;
+  cursor: pointer;
+}
+
+/* La carte : une affiche et rien d'autre. Un titre sous chaque vignette
+   rendrait un rang de quinze illisible — il est dans l'infobulle. */
+.carteHote {
+  position: relative;
+  touch-action: none;
+  cursor: grab;
+}
+
+.carteHote:active {
+  cursor: grabbing;
+}
+
+.carte {
+  inline-size: 54px;
+  block-size: 78px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.carte img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.carteFantome {
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.55);
+  cursor: grabbing;
+}
+
+.carteVide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 100%;
+  padding: 2px;
+  font-size: var(--text-xs);
+  color: var(--text-3);
+  text-align: center;
+  overflow: hidden;
+}
+
+.carteX {
+  position: absolute;
+  inset-block-start: -5px;
+  inset-inline-end: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 18px;
+  block-size: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text-2);
+  cursor: pointer;
+  opacity: 0;
+}
+
+.carteHote:hover .carteX,
+.carteX:focus-visible {
+  opacity: 1;
+}
+
+.carteX:hover {
+  color: var(--text);
+}

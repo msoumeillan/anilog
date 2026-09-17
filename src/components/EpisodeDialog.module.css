@@ -1,0 +1,148 @@
+.watches {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.watch {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--text-2);
+}
+
+.watchIcon {
+  color: var(--accent);
+}
+
+.watchRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 22px;
+  block-size: 22px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.watchRemove:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.logRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.date {
+  flex: 1 1 160px;
+  min-block-size: 38px;
+  padding-inline: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+/* Le sélecteur natif du navigateur est clair par défaut : on l'inverse pour
+   qu'il ne troue pas le thème sombre. */
+.date::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.date::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Précédent · Terminé · Suivant. Les flèches encadrent la sortie plutôt que
+   de la concurrencer. */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.done {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+/* Le résumé de l'épisode. Il vit dans la colonne de gauche, avec la vignette
+   et les notes : ce qu'on lit pour se souvenir, séparé de ce sur quoi on
+   agit. */
+.synopsis {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--lh-body);
+  color: var(--text-2);
+}
+
+/* Les notes du public. Discrètes : elles situent l'épisode, elles ne doivent
+   pas concurrencer la note qu'on s'apprête à donner soi-même. */
+.ratings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+}
+
+.rating {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--text-2);
+}
+
+/* ── Deux colonnes ────────────────────────────────────────── */
+
+/* À gauche ce qu'on regarde, à droite ce qu'on renseigne. Empilé, la vignette
+   16/9 mangeait la moitié de la hauteur et repoussait « Mark as watched » hors
+   du champ : il fallait défiler pour faire la seule chose qu'on était venu
+   faire. Les deux colonnes ont des hauteurs voisines, donc rien ne défile. */
+.split {
+  display: grid;
+  gap: var(--sp-5);
+}
+
+@media (min-width: 720px) {
+  .split {
+    /* Assez large pour que la vignette reste lisible, pas au point de serrer
+       la rangée de notes de 1 à 10 qui vit à droite. */
+    grid-template-columns: 300px minmax(0, 1fr);
+  }
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+.still {
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
