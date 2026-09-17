@@ -1,4 +1,4 @@
-# AniLog
+# AniLog(encore en cours de dev)
 
 Journal personnel d'animes et de mangas : ce qu'on regarde, ce qu'on lit, où
 on en est et ce qu'on en pense. Suivi par épisode et par chapitre, notes et
